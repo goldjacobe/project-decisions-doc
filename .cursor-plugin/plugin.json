@@ -1,0 +1,14 @@
+{
+  "name": "project-decisions-doc",
+  "version": "1.0.0",
+  "description": "One living decisions doc per Cursor Project: every question for the owner on a single page with stable IDs, options, a recommendation, and a blank answer line. Works with Notion via MCP or any shared doc tool.",
+  "author": {
+    "name": "Jacob Gold"
+  },
+  "homepage": "https://github.com/goldjacobe/project-decisions-doc",
+  "repository": "https://github.com/goldjacobe/project-decisions-doc",
+  "license": "MIT",
+  "keywords": ["decisions", "projects", "cloud-agents", "notion", "workflow", "agents"],
+  "logo": "assets/logo.svg",
+  "skills": "./skills/"
+}
