@@ -1,6 +1,6 @@
 ---
 name: project-decisions-doc
-description: Set up and maintain one living decisions doc per Cursor Project (or any long-running agent), so every question for the owner lives on a single page with stable IDs, options, a recommendation, and a blank answer line. Use this when you run one or more Cursor Projects or coordinator agents for someone, when decisions are piling up across chat messages, AskQuestion prompts, grill/planning rounds, PR blockers, or scattered docs, or when the owner asks for "one decisions page per project".
+description: Set up and maintain one living decisions doc per Cursor Project (or any long-running agent), so every question for the owner lives on a single page with stable IDs, options, a recommendation, and a blank answer line, while PRs that only need a review or are gated sit as one-line entries instead of decisions. Use this when you run one or more Cursor Projects or coordinator agents for someone, when decisions are piling up across chat messages, AskQuestion prompts, grill/planning rounds, PR blockers, or scattered docs, or when the owner asks for "one decisions page per project".
 ---
 
 # One living decisions doc per Project
@@ -15,7 +15,7 @@ Words used below:
 ## The rules
 
 1. **One page per Project**, titled `<Project>: decisions for <Owner>`. It is the only place a decision for the owner is written out in full.
-2. **Everything goes on it**, whatever produced the question: a planning or "grill me" interview round, an AskQuestion prompt, a PR blocker that needs a human call, a product or design question, or an approval the owner has to get from or relay to someone else. A planning or grill round gets its own **section on the page**, never a separate page.
+2. **Everything goes on it**, whatever produced the question: a planning or "grill me" interview round, an AskQuestion prompt, a PR blocker that needs a real human call (a choice between options, not just a review), a product or design question, or an approval the owner has to get from or relay to someone else. A planning or grill round gets its own **section on the page**, never a separate page.
 3. **Stable IDs.** Every item gets an area-prefixed ID like `GIT-3`, `UX-2`, `ROLL-1`. An ID never changes and is never reused, even after the item is decided or dropped.
 4. **Open items are ordered by urgency**, with **approvals to relay at the top** (they usually block someone else).
 5. **Every Open item has**: the context, the options with their real costs, a recommendation with the reason, and a blank `Your answer:` line.
@@ -23,6 +23,7 @@ Words used below:
 7. **Default calls.** If the Project had to decide something while the owner was away, record it under Decided labeled `default call, not <Owner>'s decision`, with the reason and how to overturn it.
 8. **Append, don't fork.** New items are added to the same page as soon as each is ready. Never start a new page per round. If a Project already has scattered decision pages, merge them into this one (see Migration).
 9. **Messages are summaries.** Any message to the owner about decisions is one line per choice (`ID`, the choice, the recommendation) plus a link to the page. The full write-up lives only on the page.
+10. **A gated PR is not a decision.** A PR that just needs a review, a stamp, a code-owner approval, or a check to go green is a PR to unblock, not a choice. It gets **one line** in the `PRs to unblock` section: the PR link and what is blocking it (e.g. `#1234: needs a code-owner review from the payments team`). No ID, no context block, no options, no recommendation, no `Your answer:` line. Remove the line once the PR is unblocked or merged. Only if unblocking it really needs the owner to pick between options (merge despite a failing check, reassign the review, drop the PR) does it become an Open item with an ID.
 
 ## Setup (coordinator running several Projects)
 
@@ -53,6 +54,12 @@ The item then moves to **Decided** with your words quoted, and the work it unblo
 
 **IDs** never change and are never reused: <PREFIX> (<area>), <PREFIX> (<area>),
 APPROVE (an approval you get or relay for someone else).
+
+---
+
+# PRs to unblock
+One line each: the PR and what is blocking it. These are not decisions; nothing to answer here.
+- <PR link>: <what is blocking it, e.g. "needs review from the infra code owners">
 
 ---
 
@@ -134,7 +141,7 @@ Every message to the owner about decisions looks like this, and nothing longer:
 - UX-7: keep the legacy settings tab for one release. Rec: yes, then remove.
 ```
 
-One line per choice: ID, the choice in a few words, the recommendation. Then the link. Never paste the full context into chat; it lives on the page.
+One line per choice: ID, the choice in a few words, the recommendation. Then the link. Never paste the full context into chat; it lives on the page. Gated PRs are not choices: if they are worth mentioning at all, list them separately as `<PR>: <what is blocking it>`, never as a numbered decision.
 
 ## Migration (scattered pages)
 
@@ -173,6 +180,7 @@ Whatever the tool, the invariants stay the same: one page per Project, stable ID
 - [ ] Intro explains how to answer and lists the ID prefixes.
 - [ ] Open is ordered by urgency, approvals to relay first.
 - [ ] Every Open item has context, options with costs, a recommendation, and a blank `Your answer:` line.
+- [ ] PRs that only need a review or are gated are one line each under `PRs to unblock` (PR link plus blocker), not Open decisions.
 - [ ] Decided items quote the owner's answer, are dated, and say where they landed.
 - [ ] Default calls are labeled `default call, not <Owner>'s decision`.
 - [ ] Old pages are merged in and linked under History.
