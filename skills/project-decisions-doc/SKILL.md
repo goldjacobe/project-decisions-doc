@@ -1,6 +1,6 @@
 ---
 name: project-decisions-doc
-description: Set up and maintain one living decisions doc per Cursor Project (or any long-running agent), so every question for the owner lives on a single page with stable IDs, options, a recommendation, and a blank answer line, while PRs that only need a review or are gated sit as one-line entries instead of decisions. Use this when you run one or more Cursor Projects or coordinator agents for someone, when decisions are piling up across chat messages, AskQuestion prompts, grill/planning rounds, PR blockers, or scattered docs, or when the owner asks for "one decisions page per project".
+description: Set up and maintain one living decisions doc per Cursor Project (or any long-running agent), so every question for the owner lives on a single page with stable IDs, options, a recommendation, and a blank answer line, while PRs that only need a review or are gated sit as one-line entries instead of decisions, every PR mention is a link, and every page sits under the owner's index page if they keep one. Use this when you run one or more Cursor Projects or coordinator agents for someone, when decisions are piling up across chat messages, AskQuestion prompts, grill/planning rounds, PR blockers, or scattered docs, or when the owner asks for "one decisions page per project".
 ---
 
 # One living decisions doc per Project
@@ -23,20 +23,23 @@ Words used below:
 7. **Default calls.** If the Project had to decide something while the owner was away, record it under Decided labeled `default call, not <Owner>'s decision`, with the reason and how to overturn it.
 8. **Append, don't fork.** New items are added to the same page as soon as each is ready. Never start a new page per round. If a Project already has scattered decision pages, merge them into this one (see Migration).
 9. **Messages are summaries.** Any message to the owner about decisions is one line per choice (`ID`, the choice, the recommendation) plus a link to the page. The full write-up lives only on the page.
-10. **A gated PR is not a decision.** A PR that just needs a review, a stamp, a code-owner approval, or a check to go green is a PR to unblock, not a choice. It gets **one line** in the `PRs to unblock` section: the PR link and what is blocking it (e.g. `#1234: needs a code-owner review from the payments team`). No ID, no context block, no options, no recommendation, no `Your answer:` line. Remove the line once the PR is unblocked or merged. Only if unblocking it really needs the owner to pick between options (merge despite a failing check, reassign the review, drop the PR) does it become an Open item with an ID.
+10. **A gated PR is not a decision.** A PR that just needs a review, a stamp, a code-owner approval, or a check to go green is a PR to unblock, not a choice. It gets **one line** in the `PRs to unblock` section: the PR link and what is blocking it (e.g. `[#1234](<PR URL>): needs a code-owner review from the payments team`). No ID, no context block, no options, no recommendation, no `Your answer:` line. Remove the line once the PR is unblocked or merged. Only if unblocking it really needs the owner to pick between options (merge despite a failing check, reassign the review, drop the PR) does it become an Open item with an ID.
+11. **Every PR mention is a link.** Anywhere on the page, including the update log or "Since your last answers" callout at the top, a PR is always written as a link to the PR (e.g. `[#1234](<PR URL>)`), never a bare `#1234`. Before writing, copy the exact URL pattern from a PR that is already linked on the page (or on the owner's index page), so every link points at the right code host and repo.
+12. **Fix existing bare mentions too.** Rule 11 applies to what is already on the page, not just new text. When you find a bare PR number (most often in the update log), replace it with the link. Change only the mention; don't restructure anything else. If the coordinator runs a scan that lists bare mentions per page, clear your page's entries.
+13. **Pages live under the owner's index.** If the owner keeps a top-level index page for their Projects' decisions, every Project's decisions page is a subpage of it, and a new Project creates its page there. If an existing page is moved under the index, keep writing to that same page (same page ID); if it has to be recreated instead (e.g. it lives in a different workspace), switch to the new page once it exists and stop writing to the old one.
 
 ## Setup (coordinator running several Projects)
 
 Do this once per Project. If you are a single Project setting yourself up, do steps 2 to 6 for yourself.
 
-1. **List the Projects** you run and the owner of each. Pick where the pages live: one parent page (e.g. `Decisions`) or each Project's existing context page. Ask the owner only if there is no obvious place.
+1. **List the Projects** you run and the owner of each. Pick where the pages live: if the owner keeps a top-level index page for their Projects' decisions, use it as the parent for every page; otherwise one parent page (e.g. `Decisions`) or each Project's existing context page. Ask the owner only if there is no obvious place.
 2. **Find existing decision material** for the Project: pages or docs with names like "decisions", "open questions", "round 2", "grill", "remaining decisions", plus unanswered AskQuestion prompts and decision messages in chat. Note their links.
-3. **Create the page** from the template below, titled `<Project>: decisions for <Owner>`, under the chosen parent. If a page with that exact title already exists, reuse it; never create a second one.
+3. **Create the page** from the template below, titled `<Project>: decisions for <Owner>`, under the chosen parent (the owner's index page, if there is one). If a page with that exact title already exists, reuse it; never create a second one.
 4. **Choose the ID prefixes** for the Project's areas (2 to 5 capital letters each, e.g. `API`, `UX`, `DATA`, `SEC`, plus `APPROVE` for approvals to relay). List them in the page intro. If old pages already used IDs, keep those IDs.
 5. **Migrate** the existing material (see Migration).
 6. **Record the page link** wherever the Project keeps durable notes (its memory, notes file, README, or system prompt) and include it in every report. Add the rules above to the Project's standing instructions so new rounds follow them without a reminder.
 7. **Tell each Project** (if you are the coordinator) to adopt the standard now without stopping its current work, and to reply with: the page URL, how many Open and Decided items it has, and which old pages it folded in.
-8. **Optional ledger.** On a schedule (hourly works), list every Project with its decisions page link and its count of Open items, and flag any Project that has no page, more than one page, or decision write-ups outside the page.
+8. **Optional ledger.** On a schedule (hourly works), list every Project with its decisions page link and its count of Open items, and flag any Project that has no page, more than one page, a page outside the owner's index, or decision write-ups outside the page. It can also list, per page, PR mentions that aren't links, so each Project knows what to fix.
 
 ## Page template
 
@@ -141,7 +144,7 @@ Every message to the owner about decisions looks like this, and nothing longer:
 - UX-7: keep the legacy settings tab for one release. Rec: yes, then remove.
 ```
 
-One line per choice: ID, the choice in a few words, the recommendation. Then the link. Never paste the full context into chat; it lives on the page. Gated PRs are not choices: if they are worth mentioning at all, list them separately as `<PR>: <what is blocking it>`, never as a numbered decision.
+One line per choice: ID, the choice in a few words, the recommendation. Then the link. Never paste the full context into chat; it lives on the page. Gated PRs are not choices: if they are worth mentioning at all, list them separately as `<PR link>: <what is blocking it>`, never as a numbered decision.
 
 ## Migration (scattered pages)
 
@@ -158,11 +161,12 @@ When a Project already has decisions spread over several pages or messages:
 
 The Notion MCP server provides tools like `notion-search`, `notion-fetch`, `notion-create-pages`, and `notion-update-page` (names can vary by version; list the server's tools first).
 
-- **Find or create:** `notion-search` for `"<Project>: decisions for <Owner>"`. If found, `notion-fetch` it. If not, `notion-create-pages` under the parent page with the title and the template as Notion-flavored Markdown content.
+- **Find or create:** `notion-search` for `"<Project>: decisions for <Owner>"`. If found, `notion-fetch` it. If not, `notion-create-pages` under the parent page (the owner's index page, if there is one) with the title and the template as Notion-flavored Markdown content.
 - **Append an item:** fetch the page, then use `notion-update-page` to insert the new item at the right place under Open (urgency order). Prefer targeted inserts or replacements over rewriting the whole page, so you don't clobber answers the owner typed in at the same time.
 - **Record an answer:** fetch, read each `Your answer:` line, then update the page to move the item to Decided. Always fetch right before you write.
 - **Callout:** Notion supports callout blocks; use one for the "Since your last answers" box.
 - **Link:** use the page URL returned by Notion in messages and reports.
+- **PR links:** write every PR as a Markdown link, `[#1234](<PR URL>)`, using the URL pattern of a PR already linked on the page or the index.
 
 ## Using another doc tool
 
@@ -181,6 +185,8 @@ Whatever the tool, the invariants stay the same: one page per Project, stable ID
 - [ ] Open is ordered by urgency, approvals to relay first.
 - [ ] Every Open item has context, options with costs, a recommendation, and a blank `Your answer:` line.
 - [ ] PRs that only need a review or are gated are one line each under `PRs to unblock` (PR link plus blocker), not Open decisions.
+- [ ] Every PR mention on the page, update log included, is a link to the PR; no bare `#1234` left.
+- [ ] The page is a subpage of the owner's index page, if they keep one.
 - [ ] Decided items quote the owner's answer, are dated, and say where they landed.
 - [ ] Default calls are labeled `default call, not <Owner>'s decision`.
 - [ ] Old pages are merged in and linked under History.
